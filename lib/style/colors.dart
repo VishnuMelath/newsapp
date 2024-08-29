@@ -4,4 +4,4 @@ var pink=Colors.pink[100]!;
 
 var red=Colors.red; 
 
-var grey=Colors.grey[350];
+var grey=Colors.grey;
