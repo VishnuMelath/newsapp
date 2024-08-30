@@ -29,7 +29,7 @@ class NewsPage extends StatelessWidget {
                 dateWidget(newsDataModel.publishedAt),
                 Padding(
                   padding: const EdgeInsets.only(top:8.0),
-                  child: Text(newsDataModel.content,style: blackWeightedPlainTextStyle,),
+                  child: Text(newsDataModel.content,style: contentTextStyle,),
                 )
               ],
             ),
