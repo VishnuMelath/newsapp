@@ -4,26 +4,39 @@ import '../../../repository/repository.dart';
 import 'loading.dart';
 import 'newstile.dart';
 
-Widget newsListWidget()
-{
-  return  FutureBuilder(
-                        future: NewsRepository().fetchAllNews(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data!.isNotEmpty) {
-                              return ListView.builder(
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (context, index) {
-                                  return newsTile(snapshot.data![index]);
-                                },
-                              );
-                            }
-                            else {
-                              return const Text('No news found tap to retry');
-                            }
-                          } else {
-                           return loadingWidget();
-                          }
-                        },
-                      );
+Widget newsListWidget(BuildContext context,TickerProvider vsync) {
+  return ValueListenableBuilder(
+    valueListenable: NewsRepository.news,
+    builder: (context, value, _) {
+      if (!NewsRepository.loading) {
+        if (NewsRepository.error) {
+          return  Center(child: GestureDetector (
+            onTap: () {
+              
+      NewsRepository().fetchAllNews();
+            },
+            child:ListView(
+              children: [
+                 SizedBox(
+                  height: MediaQuery.sizeOf(context).height*0.7,
+                  child:const Center(child: Text('Error!!swipe down to refresh'))),
+              ],
+            )));
+        } else {
+          if (value.isNotEmpty) {
+            return ListView.builder(
+              itemCount: value.length,
+              itemBuilder: (context, index) {
+                return Newstile(newsDataModel: value[index]);
+              },
+            );
+          } else {
+            return const Center(child:  Text('No news found swipe down to refresh'));
+          }
+        }
+      } else {
+        return loadingWidget();
+      }
+    },
+  );
 }
